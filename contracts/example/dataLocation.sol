@@ -12,9 +12,9 @@ contract dataLocation {
     function example() external {
         mystructs[msg.sender] = MyStruct( {num: 123, text: "bar"} );
 
-        // MyStruct memory readOnly = mystructs[msg.sender]; // shadow copy, won't change original
-        MyStruct storage readOnly = mystructs[msg.sender]; // deep copy, change original
-        
+        // MyStruct memory readOnly = mystructs[msg.sender]; // deep copy, won't change original
+        MyStruct storage readOnly = mystructs[msg.sender]; // shadow copy, change original
+
         readOnly.num = 456;
     }
 }
