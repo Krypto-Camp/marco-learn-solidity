@@ -23,7 +23,7 @@ interface ICounter {
 // deploy contract Counter
 // deploy callInterface
 // and paste the address of "contract Counter" into example
-contract callInterface {
+contract Interface {
     uint public count;
 
     function example(address _counter) external {
