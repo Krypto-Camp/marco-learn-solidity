@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity ^0.8.0;
 
 /*
 Solidity 0.8 new feature
@@ -15,7 +15,7 @@ contract safeMath {
 
     function testUncheckedFlow() external pure returns (uint) {
         uint8 x = 0;
-        unchecked { x--; } 
-        return x; // x = 255
+        unchecked { x--; }  // 255
+        return x; 
     }
 }
