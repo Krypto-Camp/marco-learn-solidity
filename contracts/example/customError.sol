@@ -10,7 +10,7 @@ Solidity 0.8 new feature
 // custom error
 error Unauthorized(address caller);
 
-contract customError {
+contract CustomError {
     address payable owner = payable(msg.sender);
 
     function withdraw() external {
