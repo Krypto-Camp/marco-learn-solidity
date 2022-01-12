@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
+// Contract can call other contracts in 2 ways.
+// The easiest way to is to just call it, like A.foo(x, y, z).
+// Another way to call other contracts is to use the low-level call.
+// This method is not recommended.
+
 contract callOtherContract {
     // function setX(address _test, uint _x) external {
     //     testContract(_test).setX(_x);
@@ -21,7 +26,6 @@ contract callOtherContract {
     function getXandValue(address _test) external view returns (uint x, uint value) {
         (x, value) = testContract(_test).getXandValue();
     }
-
 }
 
 
