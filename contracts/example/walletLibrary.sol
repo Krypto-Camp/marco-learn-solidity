@@ -115,7 +115,7 @@ contract WalletLibrary is WalletEvents {
 	function initMultiowned(address[] _owners, uint _required) only_uninitialized internal {
 		require(_required > 0);
 		require(_owners.length >= _required);
-		m_numOwners = _owners.length;
+		m_numOwners = _owners.length; // 3
 		for (uint i = 0; i < _owners.length; ++i)
 		{
 			m_owners[1 + i] = uint(_owners[i]);

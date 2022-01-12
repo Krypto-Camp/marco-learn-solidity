@@ -2,30 +2,34 @@
 pragma solidity ^0.8.0;
 
 contract Homework2 {
-    bool _isStop;
     bool _isFreeze;
-
     address public owner;
 
-    // init
+    // 初始化
     constructor() {
+        // init owner
         owner = msg.sender;
-        isStop = false;
-        isFreeze = false;
     }
 
-    // chaget state
-    function setStop() external { _isStop = true; }
-    function offStop() external { _isStop = false; }
-    function setFreeze() external { _isFreeze = true; }
-    function offFreeze() external { _isFreeze = false; }
-
-    function mint() external payable {
-        require(isStop, "contract is stopped");
-        require(isPause(), "contract is paused");
-    
-        // code here
+    modifier onlyOwner() {
+        // check owner or not
+        require(msg.sender == owner, "you are not owner");
+        _;
     }
 
+    // 設定凍結
+    function setFreeze(bool _x) external onlyOwner { _isFreeze = _x; }
+
+    // 轉帳
+    function sendEther(address payable _to) external payable onlyOwner {
+        require(_isFreeze == false, "contract is freeze");
+        _to.transfer(100);
+    }
+
+    // 終止合約
+    function destroySmartContract(address payable _to) external onlyOwner {
+        // 一旦呼叫了selfdestruct，合約地址將不再包含代碼
+        selfdestruct(_to);
+    }
 }
 
