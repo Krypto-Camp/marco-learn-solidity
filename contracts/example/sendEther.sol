@@ -13,18 +13,18 @@ contract sendEther {
 
     receive() external payable {}
 
-    function sendViaTransfer(address payable _to) external payable {
-        _to.transfer(123); // 32826 gas
+    function sendViaTransfer(address payable _to, uint _amount) external payable {
+        _to.transfer(_amount); // 32826 gas
     }
 
-    function sendViaSend(address payable _to) external payable {
-        bool sent = _to.send(123); // 32850 gas
+    function sendViaSend(address payable _to, uint _amount) external payable {
+        bool sent = _to.send(_amount); // 32850 gas
         require(sent, "send fail");
     }
 
-    function sendViaCall(address payable _to) external payable {
+    function sendViaCall(address payable _to, uint _amount) external payable {
         // (bool success, bytes memory data) = _to.call{value: 123}(""); // bytes memory data can be omit
-        (bool success, ) = _to.call{value: 123}(""); //33078 gas
+        (bool success, ) = _to.call{value: _amount}(""); //33078 gas
         require(success, "call fail");        
     }
 }
