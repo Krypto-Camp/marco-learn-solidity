@@ -22,6 +22,7 @@ A ---> B ---> C
 contract TestDelegateCall {
     // 這裡的變數狀態不會改變
     // 更新此份合約，變數的順序不能更動，只能往下增加
+    // 不然呼叫的合約會對不上
     uint public num;
     address public sender;
     uint public value;
