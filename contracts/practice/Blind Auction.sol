@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.0;
+pragma solidity 0.8.10;
 
 contract BlindedAuction {
 
@@ -8,16 +8,17 @@ contract BlindedAuction {
         bytes32 blindedBid;
         uint deposit;
     }
+    
+    mapping(address => Bid[]) public bids;
 
     address payable public beneficiary;
-    address public highestBidder;
-
     uint public biddingEnd;
     uint public revealEnd;
-
     bool public ended;
 
-    mapping(address => Bid[]) public bids;
+    address public highestBidder;
+    uint public highestBid;
+
     mapping(address => uint) pendingReturns;
 
 
@@ -38,9 +39,9 @@ contract BlindedAuction {
 
     // init
     constructor(
-        uint _biddingTime;
-        uint _revealTime;
-        address payable _beneficiary;
+        uint _biddingTime,
+        uint _revealTime,
+        address payable _beneficiary
     ) {
         beneficiary = _beneficiary;
         biddingEnd = block.timestamp + _biddingTime;
@@ -49,7 +50,7 @@ contract BlindedAuction {
 
 
     // FUNCTION
-    function generateBlindedBidBytes32(uint value, bool fake) public view returns (bytes32) {
+    function generateBlindedBidBytes32(uint value, bool fake) public pure returns (bytes32) {
         return keccak256( abi.encodePacked(value, fake) );
     }
 
@@ -62,15 +63,41 @@ contract BlindedAuction {
         );
     }
 
-    function reveal() {
-        
+    function reveal(
+        uint[] memory _values,
+        bool[] memory _fake
+    ) 
+        public
+        onlyAfter(biddingEnd)
+        onlyBefore(revealEnd)
+    {
+        uint length = bids[msg.sender].length;
+        require(_values.length == length);
+        require(_fake.length == length);
+
+        uint refund;
+        for (uint i=0; i<length; i++) {
+            Bid storage bidToCheck = bids[msg.sender][i];
+            (uint value, bool fake) = (_values[i], _fake[i]);
+            if (bidToCheck.blindedBid != keccak256(abi.encodePacked(value, fake))) {
+                continue;
+            }   
+            refund += bidToCheck.deposit;
+            if (!fake && bidToCheck.deposit >= value) {
+                if (placeBid(msg.sender, value)) {
+                    refund -= value;
+                }
+            }
+            bidToCheck.blindedBid = bytes32(0);
+        }
+        payable(msg.sender).transfer(refund);
     }
 
     function auctionEnd() public payable onlyAfter(revealEnd) {
-        require(!end);
-        emit AuctionEnded(highestBidder, hightestBid);
+        require(!ended);
+        emit AuctionEnded(highestBidder, highestBid);
         ended = true;
-        beneficiary.transfer(hightestBid);
+        beneficiary.transfer(highestBid);
     }
 
     function withdraw() public {
@@ -84,18 +111,15 @@ contract BlindedAuction {
 
     function placeBid(address bidder, uint value) internal returns (bool success) {
         // 要小於等於，不然會用一樣的出價取代前一筆出價，這樣價格就不會往上加了
-        if (value <= highestBidder) {
+        if (value <= highestBid) {
             return false;
         }
         if (highestBidder != address(0)) {
-            pendingReturns[msg.sender] += hightestBid;
+            pendingReturns[msg.sender] += highestBid;
         }
-        highestBidder = value;
-        highestBidder = biddingEnd;
+        highestBid = value;
+        highestBidder = bidder;
 
         return true;
     }
-
-
-
 }
