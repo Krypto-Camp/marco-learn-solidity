@@ -9,7 +9,7 @@ contract callee {
     address public owner;
     address public sender;
 
-    constructor() { owner = msg.sender; } // owner: 0xabcd...
+    constructor() { owner = msg.sender; } // owner: 部屬的人
 
     function inc() external returns (uint) {
         x++;
@@ -19,7 +19,7 @@ contract callee {
     }
 }
 
-// caller: 0x1234
+// caller address: 0x1234
 contract caller {
     uint public x;
 
