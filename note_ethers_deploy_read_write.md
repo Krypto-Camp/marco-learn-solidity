@@ -93,11 +93,11 @@ let provider = ethers.getDefaultProvider('ropsten');
 let privateKey = '0x0123456789012345678901234567890123456789012345678901234567890123';
 let wallet = new ethers.Wallet(privateKey, provider);
 
+// Create an instance of a Contract Factory
+let factory = new ethers.ContractFactory(abi, bytecode, wallet);
+
 // Deployment is asynchronous, so we use an async IIFE
 (async function() {
-
-    // Create an instance of a Contract Factory
-    let factory = new ethers.ContractFactory(abi, bytecode, wallet);
 
     // Notice we pass in "Hello World" as the parameter to the constructor
     let contract = await factory.deploy("Hello World");
@@ -133,7 +133,7 @@ let abi = [
 ];
 
 // Connect to the network
-let provider = ethers.getDefaultProvider();
+let provider = ethers.getDefaultProvider('ropsten');
 
 // The address from the above deployment example
 let contractAddress = "0x2bD9aAa2953F988153c8629926D22A6a5F69b14E";

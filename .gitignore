@@ -3,6 +3,19 @@ node_modules
 coverage
 coverage.json
 typechain
+marco-env
+scripts
+test
+
+#Hardhat files
+cache
+artifacts
+
+node_modules
+.env
+coverage
+coverage.json
+typechain
 
 #Hardhat files
 cache

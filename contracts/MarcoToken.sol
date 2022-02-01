@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 - 2. approve -> allownce -> transferFrom
     Bob withdraw 20 from Alice
     1. Alice -> contract : approve(Bob, 20)
-    2. Bob   -> contract : transferFrom(Alice, Bob, 20)
+    2. Bob   -> contract   : transferFrom(Alice, Bob, 20)
 */
 
 contract MarcoToken is ERC20, ERC20Burnable, Ownable {
