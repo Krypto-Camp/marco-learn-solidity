@@ -23,8 +23,7 @@ module.exports = {
     
     rinkeby: {
       url: API_URL,
-      accounts: [`0x${PRIVATE_KEY}`]
-      // accounts: [PRIVATE_KEY] // 這樣也可以
+      accounts: [PRIVATE_KEY] // 這樣也可以
     },
   },
   
